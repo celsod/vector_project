@@ -56,14 +56,15 @@ develop this project.
 
         let input_value: i32 = match input_value.trim().parse() { //Trying to repeat the input so the user can add more numbers to the vector
             Ok(num) => num, //if a number is entered go to input_vector.push line
-            //Ok(x) => break, //if x is entered, break the loop
+            //Ok(x) => break, //if x is entered, break the loop; I was unable to get this to work.
             Err(_) => break, //if something else is entered repeat the loop
         };
-        input_vector.push(input_value);
+        input_vector.push(input_value); //This adds the value from the input to the vector and loops back until the user
+        //inputs a value that is not a number
     };
 
-    determine_median(&mut input_vector);
-    determine_mode(&input_vector);
+    determine_median(&mut input_vector); //I am using a mutable reference because the math is going to change elements of the vector
+    determine_mode(&input_vector); //I do not need a mutable reference because I am mapping the values and counting how many of each are present
     
  }
 
@@ -74,6 +75,8 @@ develop this project.
 fn determine_median(vector: &mut Vec<i32>) -> i32 {
 
     vector.sort(); //sort the input vector
+    //The vector.sort() line simply sorts the vector from smallest to largest.  There is no need to 
+    //assign the sorted vector to a new variable.
     println!("The sorted vector is: {:?}", vector);
 
     let middle = vector.len() / 2; //finding the middle of the data points
@@ -84,7 +87,7 @@ fn determine_median(vector: &mut Vec<i32>) -> i32 {
         println!("The median is {}", median);
         median
     } else {
-        let median = vector[middle] +1;
+        let median = vector[middle] +1; //due to Rust rounding down, I add 1 to the median to get to the true median
         println!("The median is {:?}", median);
         median
     }
@@ -96,7 +99,7 @@ fn determine_mode(vector: &Vec<i32>) {
 
     for number in vector {
         let count = map.entry(number).or_insert(0);
-        *count += 1;
+        *count += 1; //Need to have a dereferenced count.  It is explained in detail in chapter 8.
     }
 
     println!("The mode is: {:?}", map);
